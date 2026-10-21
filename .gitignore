@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+.venv/
+venv/
+
+# Environnement / secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Données privées ou non versionnées
+data/raw/
+data/private/
+data/processed/
+data/exports/
+*.sqlite3
+*.db
+
+# Ne pas ajouter un fichier de compte réel ou un export d'insights sans revue de confidentialité

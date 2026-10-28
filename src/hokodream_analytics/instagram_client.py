@@ -33,3 +33,22 @@ except ConnectionError:
 else:
     donnees = response.json()
     print(f"Compte instagram connecté : {donnees.get("username")}")
+
+url_media = "https://graph.instagram.com/me/media"
+headers = {"Authorization": f"Bearer {INSTAGRAM_ACCESS_TOKEN}"}
+params = {"fields": "id,media_type,timestamp"}
+
+
+response_media = requests.get(url_media, headers=headers, timeout=10, params=params)
+
+response_media.raise_for_status()
+
+donnees_media = response_media.json()
+print(donnees_media.keys())
+
+print(type(donnees_media["data"]))
+print(len(donnees_media["data"]))
+print(type(donnees_media["paging"]))
+print(donnees_media["paging"].keys())
+print(donnees_media["data"][0].keys())
+print(donnees_media["data"][0]["media_type"])

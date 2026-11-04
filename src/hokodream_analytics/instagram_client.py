@@ -1,54 +1,28 @@
 import os
-from dotenv import load_dotenv
 import requests
-from requests import HTTPError
-from requests import ConnectionError
-from requests import Timeout
+from dotenv import load_dotenv
 
 load_dotenv()
 
-
 INSTAGRAM_ACCESS_TOKEN = os.getenv("INSTAGRAM_ACCESS_TOKEN")
-DATABASE_URL = os.getenv("DATABASE_URL")
-
 
 if not INSTAGRAM_ACCESS_TOKEN:
-    raise ValueError("Le token est manquant")
-print("Token chargé avec succès")
-
-url = "https://graph.instagram.com/me"
-headers = {"Authorization": f"Bearer {INSTAGRAM_ACCESS_TOKEN}"}
-params = {"fields": "id,username"}
-
-try:
-    response = requests.get(url, headers=headers, timeout=10, params=params)
-
-    response.raise_for_status()
-except Timeout:
-    print("Le serveur ne répond pas")
-except HTTPError:
-    print("Instagram a refusé notre requête")
-except ConnectionError:
-    print("Impossible de contacter Instagram")
-else:
-    donnees = response.json()
-    print(f"Compte instagram connecté : {donnees.get("username")}")
-
-url_media = "https://graph.instagram.com/me/media"
-headers = {"Authorization": f"Bearer {INSTAGRAM_ACCESS_TOKEN}"}
-params = {"fields": "id,media_type,timestamp"}
+    raise ValueError("Le token Instagram est manquant")
 
 
-response_media = requests.get(url_media, headers=headers, timeout=10, params=params)
+def fetch_instagram_media():
+    url_media = "https://graph.instagram.com/me/media"
+    params = {"fields": "id,media_type,timestamp"}
+    headers = {"Authorization": f"Bearer {INSTAGRAM_ACCESS_TOKEN}"}
 
-response_media.raise_for_status()
+    response_media = requests.get(url_media, headers=headers, timeout=10, params=params)
 
-donnees_media = response_media.json()
-print(donnees_media.keys())
+    response_media.raise_for_status()
+    donnees_media = response_media.json()
 
-print(type(donnees_media["data"]))
-print(len(donnees_media["data"]))
-print(type(donnees_media["paging"]))
-print(donnees_media["paging"].keys())
-print(donnees_media["data"][0].keys())
-print(donnees_media["data"][0]["media_type"])
+    return donnees_media
+
+
+if __name__ == "__main__":
+    resultat = fetch_instagram_media()
+    print(resultat.keys())

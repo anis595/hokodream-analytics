@@ -4,16 +4,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-INSTAGRAM_ACCESS_TOKEN = os.getenv("INSTAGRAM_ACCESS_TOKEN")
-
-if not INSTAGRAM_ACCESS_TOKEN:
-    raise ValueError("Le token Instagram est manquant")
-
 
 def fetch_instagram_media():
+    token = os.getenv("INSTAGRAM_ACCESS_TOKEN")
+
+    if not token:
+        raise ValueError("Le token Instagram est manquant")
+
     url_media = "https://graph.instagram.com/me/media"
     params = {"fields": "id,media_type,timestamp"}
-    headers = {"Authorization": f"Bearer {INSTAGRAM_ACCESS_TOKEN}"}
+    headers = {"Authorization": f"Bearer {token}"}
     toutes_publications = []
 
     while url_media:

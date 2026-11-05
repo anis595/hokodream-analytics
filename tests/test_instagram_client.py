@@ -1,5 +1,6 @@
 from hokodream_analytics.instagram_client import fetch_instagram_media
 from unittest.mock import Mock
+import requests
 
 page_1 = {
     "data": [
@@ -24,7 +25,16 @@ page_2 = {
 
 
 def test_pagination(monkeypatch):
+    monkeypatch.setenv("INSTAGRAM_ACCESS_TOKEN", "faux-token-test")
     reponse_1 = Mock()
     reponse_1.json.return_value = page_1
     reponse_2 = Mock()
     reponse_2.json.return_value = page_2
+    reponses = [reponse_1, reponse_2]
+
+    def faux_get(*args, **kwargs):
+        return reponses.pop(0)
+
+    monkeypatch.setattr(requests, "get", faux_get)
+    resultat = fetch_instagram_media()
+    assert len(resultat["data"]) == 5
